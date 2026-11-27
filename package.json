@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "legacy": "vite legacy --port 5174"
+    "legacy": "vite legacy --port 5174",
+    "test:py": "python3 -m unittest discover -s python",
+    "test:all": "vitest run && python3 -m unittest discover -s python",
+    "fixtures": "node tools/extract-legacy/record-fixtures.mjs"
   },
   "dependencies": {
     "preact": "10.24.3"

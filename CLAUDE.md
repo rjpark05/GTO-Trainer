@@ -8,7 +8,10 @@ Postflop practice trainer for ClubWPT Gold / WPT Global. It started as a single-
 - `src/strategy/node.ts`: `StrategyNode`, the shape every strategy view reads. `approx/` = live EV engine, `solved/` = solver tables.
 - `src/features/`: `matrix/` (hand analysis), `play/` (table, coach card, bots), `scenarios/` (drill recipes + generator, packs in `packs/`), `review/`, `profile/`.
 - `src/ui/`: shared presentational components. `data/`: bundled ranges and solutions. `tools/`: offline scripts, never shipped.
-- `npm run dev` / `npm test` / `npm run build` (Vite + vite-plugin-singlefile builds to `dist/index.html`).
+- `python/gto/`: readable Python mirror of `src/engine/` (same function names in snake_case). Keep both in sync: any engine change goes in both, and both must pass the shared fixtures in `tests/fixtures/`.
+- `tests/fixtures/*.json`: outputs recorded from the legacy app (`npm run fixtures`). Both engines take a seeded `mulberry32` rng and must match these exactly.
+- `npm run dev` / `npm test` / `npm run test:py` / `npm run test:all` / `npm run build` (Vite + vite-plugin-singlefile builds to `dist/index.html`).
+- Workflow: `main` is the base; do each feature or change on its own branch.
 
 ## Hard constraints (from the artifact host)
 - The shipped build must stay ONE self-contained .html file under 16 MB.

@@ -2,7 +2,7 @@
 // Card id: 0..51 = rank * 4 + suit. Rank 0 = '2' ... 12 = 'A'.
 
 export const RANKS = '23456789TJQKA';
-export const SUITS = 'cdhs';
+export const SUITS = 'shdc'; // same order as legacy: s=0 h=1 d=2 c=3
 
 export type Card = number;
 export type Combo = readonly [Card, Card]; // always [higher id, lower id]
