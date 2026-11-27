@@ -4,7 +4,8 @@ Postflop practice trainer for ClubWPT Gold / WPT Global. It started as a single-
 
 ## Layout and commands
 - `legacy/index.html`: original app, still runnable (`npm run legacy`). Source of the code being extracted.
-- `src/engine/`: pure poker logic, no DOM (cards, eval, equity, ev, ranges, grading). Needs tests.
+- `src/engine/`: pure poker logic, no DOM (cards, eval, equity, ev, ranges, grading, solver). Needs tests.
+- `src/engine/solver/` (mirror `python/gto/solver/`): heads-up river Nash solver. `tree` builds the bet tree from `TreeConfig`, `showdown` does exact card-removal showdowns via a sorted sweep (`naive_matchup` in Python is the reference), `cfr` runs CFR+ and reports exploitability (% pot). `src/strategy/solved/river.ts` runs it in chunks and converts nodes to `StrategyNode`. The Solver tab (`features/matrix`) shows it.
 - `src/strategy/node.ts`: `StrategyNode`, the shape every strategy view reads. `approx/` = live EV engine, `solved/` = solver tables.
 - `src/features/`: `matrix/` (hand analysis), `play/` (table, coach card, bots), `scenarios/` (drill recipes + generator, packs in `packs/`), `review/`, `profile/`.
 - `src/ui/`: shared presentational components. `data/`: bundled ranges and solutions. `tools/`: offline scripts, never shipped.
@@ -37,7 +38,7 @@ Postflop practice trainer for ClubWPT Gold / WPT Global. It started as a single-
 1. Sampling noise: ~2.4 pt equity standard error at 450 iterations is ~0.5bb on a 20bb pot, bigger than the 0.15bb mistake threshold, and options are sampled independently. Fix: exact enumeration on turn/river, shared random boards across options, faster evaluator.
 2. Opponent response curves are flat: fold elasticity is 0.24-0.28 for every profile vs a 0.7 balanced benchmark, so bet size barely moves bot folds. Recalibrate `PF_CONT` / `polFacing`.
 3. Realization factors in `preR()` should depend on hand class, position, texture.
-4. Nash work (goal: equilibrium benchmarks, not exploitable): solve heads-up river spots exactly (CFR or LP) offline, ship tables as data; add an exploitability check of the user's own strategy profile; flop and multiway stay approximate and should be labeled as such.
+4. Nash work (goal: equilibrium benchmarks, not exploitable): heads-up river CFR+ solver is done and runs in the browser (Solver tab). Next: turn (chance node over river cards), hooking Play/grading to solved spots, an exploitability check of the user's own strategy profile. Flop and multiway stay approximate and must be labeled as such.
 5. Hand import: Review tab takes screenshot, pasted text, or shorthand like `BTN AhKd vs BB | 6max 100bb | open 2.5 call | F QsJd4c: x b4 c | T 7h: x x | R 2s: b14 c | shows QhTh | -20.5`.
 
 ## Working agreements

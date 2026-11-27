@@ -3,13 +3,13 @@ import { MatrixView } from '@/features/matrix/MatrixView';
 import { PlayView } from '@/features/play/PlayView';
 
 const TABS = {
+  matrix: { label: 'Solver', view: MatrixView },
   play: { label: 'Play', view: PlayView },
-  matrix: { label: 'Analysis', view: MatrixView },
 } as const;
 type TabId = keyof typeof TABS;
 
 export function App() {
-  const [tab, setTab] = useState<TabId>('play');
+  const [tab, setTab] = useState<TabId>('matrix');
   const View = TABS[tab].view;
   return (
     <div class="app">
