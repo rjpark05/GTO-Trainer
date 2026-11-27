@@ -1,13 +1,21 @@
 # GTO / Poker trainer
 
-Single-file HTML app (`index.html`, ~560KB, ~5,800 lines) for postflop practice on ClubWPT Gold / WPT Global. It was built and published as a claude.ai artifact; this repo is the move to local development.
+Postflop practice trainer for ClubWPT Gold / WPT Global. It started as a single-file claude.ai artifact, now kept in `legacy/index.html` (~560KB, ~5,800 lines). New code is being migrated into `src/` piece by piece.
+
+## Layout and commands
+- `legacy/index.html`: original app, still runnable (`npm run legacy`). Source of the code being extracted.
+- `src/engine/`: pure poker logic, no DOM (cards, eval, equity, ev, ranges, grading). Needs tests.
+- `src/strategy/node.ts`: `StrategyNode`, the shape every strategy view reads. `approx/` = live EV engine, `solved/` = solver tables.
+- `src/features/`: `matrix/` (hand analysis), `play/` (table, coach card, bots), `scenarios/` (drill recipes + generator, packs in `packs/`), `review/`, `profile/`.
+- `src/ui/`: shared presentational components. `data/`: bundled ranges and solutions. `tools/`: offline scripts, never shipped.
+- `npm run dev` / `npm test` / `npm run build` (Vite + vite-plugin-singlefile builds to `dist/index.html`).
 
 ## Hard constraints (from the artifact host)
 - The shipped build must stay ONE self-contained .html file under 16 MB.
 - External scripts only from cdnjs.cloudflare.com, cdn.jsdelivr.net/npm/, cdn.tailwindcss.com, code.jquery.com (exact pinned versions). External CSS only from fonts.googleapis.com. No other network requests.
 - If the code is split into modules, add a build step that bundles back into one index.html.
 
-## Engine map (search these names in index.html)
+## Engine map (search these names in legacy/index.html)
 - Hand evaluator: `score()`; Monte Carlo equity: `equity()`, `eqW()` (350-900 random iterations per option).
 - Preflop EV: `evOpen`, `evVsOpen`, `evVs3bet`, `evVsJam`; realization factors in `preR()` (hard-coded constants).
 - Postflop EV: `evPost`, `buildSizeModel`, `respondBal` (balanced-opponent leg), `polFacing` / `polNoBet` (opponent response model), `botClass` (hand classes M, S, m, w, d, a).
